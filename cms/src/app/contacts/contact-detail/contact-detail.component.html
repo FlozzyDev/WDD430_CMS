@@ -1,35 +1,24 @@
 <div class="row">
-    <div class="col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading clearfix">
-                <h2>{{ contact?.name }}</h2>
-                <!-- <h2>R. Kent Jackson</h2> -->
-                <div class="pull-left">
-                    <img [src]="contact?.imageUrl" alt="{{contact?.name}}" class="img-responsive">
-                </div>
-                <!-- <div class="pull-left">
-                    <img src="../../../assets/images/jacksonk.jpg" alt="{{contact?.name}}" class="img-responsive mb-8"
-                        style="max-height: 90px;">
-                </div> -->
-                <div class="pull-right">
-                    <button class="btn btn-primary m-8">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <span class="ft-bold mb-8">Email:</span> {{ contact?.email }}
-                        <!-- <span class="ft-bold">Email:</span> jacksonk@byu.edu -->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 mt-8">
-                        <span class="ft-bold">Phone:</span> {{ contact?.phone }}
-                        <!-- <span class="ft-bold">Phone:</span> 208-496-3771 -->
-                    </div>
-                </div>
-            </div>
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div class="panel-heading clearfix">
+        <h2>{{ contact?.name }}</h2>
+        <div class="pull-left">
+          <img [src]="contact?.imageUrl" alt="{{ contact?.name }}" class="img-responsive" />
         </div>
+        <div class="pull-right">
+          <button class="btn btn-primary m-8">Edit</button>
+          <button class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12"><span class="ft-bold mb-8">Email:</span> {{ contact?.email }}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 mt-8"><span class="ft-bold">Phone:</span> {{ contact?.phone }}</div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

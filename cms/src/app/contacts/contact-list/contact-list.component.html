@@ -1,27 +1,23 @@
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="row">
-            <div class="col-xs-6">
-                <h2 class="ft-bold m-8">Contacts</h2>
-            </div>
-            <div class="col-xs-6">
-                <button class="btn btn-success pull-right m-8">New Contact</button>
-            </div>
-        </div>
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-6">
+        <h2 class="ft-bold m-8">Contacts</h2>
+      </div>
+      <div class="col-xs-6">
+        <button class="btn btn-success pull-right m-8">New Contact</button>
+      </div>
     </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-12">
-                <a href="#" class="list-group-item clearfix" *ngFor="let contact of contacts">
-                    <div class="pull-left">
-                        <h4 class="list-group-item-heading">{{ contact.name }}</h4>
-                    </div>
-                    <span class="pull-right">
-                        <img src="{{contact.imageUrl}}" alt="{{ contact.name }}" class="img-responsive"
-                            style="max-height: 50px">
-                    </span>
-                </a>
-            </div>
-        </div>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <cms-contact-item
+          *ngFor="let contact of contacts"
+          [contact]="contact"
+          (click)="onSelected(contact)"
+        ></cms-contact-item>
+      </div>
     </div>
+  </div>
 </div>
