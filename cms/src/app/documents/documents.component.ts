@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Document } from './document.model';
 
 @Component({
   selector: 'cms-documents',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './documents.component.html',
   styleUrl: './documents.component.css',
 })
-export class DocumentsComponent {}
+export class DocumentsComponent {
+  selectedDocument?: Document;
+}
