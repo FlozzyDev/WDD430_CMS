@@ -7,8 +7,8 @@
           <img [src]="contact?.imageUrl" alt="{{ contact?.name }}" class="img-responsive" />
         </div>
         <div class="pull-right">
-          <button class="btn btn-primary m-8">Edit</button>
-          <button class="btn btn-danger">Delete</button>
+          <a class="btn btn-primary m-8" [routerLink]="['/contacts', id!, 'edit']">Edit</a>
+          <a class="btn btn-danger" (click)="onDelete()">Delete</a>
         </div>
       </div>
       <div class="panel-body">
