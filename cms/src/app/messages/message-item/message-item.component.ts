@@ -16,13 +16,16 @@ export class MessageItemComponent implements OnInit {
   constructor(private contactService: ContactService) {}
 
   ngOnInit() {
-    const contact: Contact | null = this.contactService.getContact(
-      this.message?.sender || 'Error finding sender'
-    );
-    if (contact) {
-      this.messageSender = contact.name;
-    } else {
-      this.messageSender = 'Error finding sender';
-    }
+    // Setting a timeout since my contacts are taking a sec to load for some reason, may think of something better
+    setTimeout(() => {
+      const contact: Contact | null = this.contactService.getContact(
+        this.message?.sender || 'Error - could not find user'
+      );
+      if (contact) {
+        this.messageSender = contact.name;
+      } else {
+        this.messageSender = 'Error - could not find user';
+      }
+    }, 100);
   }
 }
