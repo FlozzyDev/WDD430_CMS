@@ -4,4 +4,7 @@
     <span class="ml-8 ft-bold">{{ message?.subject }}</span>
     <div class="messageText">{{ message?.msgText }}</div>
   </div>
+  <span class="pull-right" *ngIf="belongsToCurrentUser">
+    <button class="btn btn-danger btn-sm" (click)="onDelete()">Delete</button>
+  </span>
 </a>

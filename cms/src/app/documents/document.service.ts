@@ -16,24 +16,26 @@ export class DocumentService {
 
   constructor(private http: HttpClient) {
     this.http
-      .get<Document[]>('https://project-f57dd-default-rtdb.firebaseio.com/documents.json')
+      .get<{ message: string; documents: Document[] }>('http://localhost:3000/documents')
       .subscribe(
-        (documents: Document[]) => {
-          this.documents = documents;
+        (responseData) => {
+          this.documents = responseData.documents;
           this.maxDocumentId = this.getMaxId();
-          this.documents.sort((a, b) => {
-            // sort docs by the name
-            if (a.name < b.name) return -1;
-            if (a.name > b.name) return 1;
-            return 0;
-          });
-
-          this.documentListChangedEvent.next(this.documents.slice());
+          this.sortAndSend();
         },
         (error: any) => {
-          console.error('Error when using GET from firebase:', error);
+          console.error('Error fetching documents:', error);
         }
       );
+  }
+
+  sortAndSend() {
+    this.documents.sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+    this.documentListChangedEvent.next(this.documents.slice());
   }
   getDocuments(): Document[] {
     return this.documents.slice();
@@ -42,53 +44,75 @@ export class DocumentService {
     return this.documents.find((document) => document.id === id) || null;
   }
 
-  // method to post
-  storeDocuments() {
-    const documentsJson = JSON.stringify(this.documents);
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    this.http
-      .put('https://project-f57dd-default-rtdb.firebaseio.com/documents.json', documentsJson, {
-        headers,
-      })
-      .subscribe(() => {
-        this.documentListChangedEvent.next(this.documents.slice());
-      });
-  }
-
   addDocument(newDocument: Document) {
     if (!newDocument) {
       return;
     }
-    this.maxDocumentId++;
-    newDocument.id = this.maxDocumentId.toString();
-    this.documents.push(newDocument);
-    this.storeDocuments();
+
+    // make sure id of the new Document is empty
+    newDocument.id = '';
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    // add to database
+    this.http
+      .post<{ message: string; document: Document }>(
+        'http://localhost:3000/documents',
+        newDocument,
+        { headers: headers }
+      )
+      .subscribe((responseData) => {
+        // add new document to documents
+        this.documents.push(responseData.document);
+        this.sortAndSend();
+      });
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
     if (!originalDocument || !newDocument) {
       return;
     }
-    const pos = this.documents.indexOf(originalDocument);
+
+    const pos = this.documents.findIndex((d) => d.id === originalDocument.id);
+
     if (pos < 0) {
       return;
     }
+
+    // set the id of the new Document to the id of the old Document
     newDocument.id = originalDocument.id;
-    this.documents[pos] = newDocument;
-    this.storeDocuments();
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    // update database
+    this.http
+      .put('http://localhost:3000/documents/' + originalDocument.id, newDocument, {
+        headers: headers,
+      })
+      .subscribe((response: any) => {
+        this.documents[pos] = newDocument;
+        this.sortAndSend();
+      });
   }
 
   deleteDocument(document: Document) {
     if (!document) {
       return;
     }
-    const pos = this.documents.indexOf(document);
+
+    const pos = this.documents.findIndex((d) => d.id === document.id);
+
     if (pos < 0) {
       return;
     }
-    this.documents.splice(pos, 1);
-    this.storeDocuments();
+
+    // delete from database
+    this.http
+      .delete('http://localhost:3000/documents/' + document.id)
+      .subscribe((response: any) => {
+        this.documents.splice(pos, 1);
+        this.sortAndSend();
+      });
   }
 
   getMaxId(): number {

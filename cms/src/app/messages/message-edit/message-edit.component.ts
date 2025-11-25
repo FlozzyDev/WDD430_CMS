@@ -9,7 +9,7 @@ import { MessageService } from '../message.service';
   styleUrl: './message-edit.component.css',
 })
 export class MessageEditComponent {
-  currentSender: string = '18'; // IT Admin Robot ID that we send
+  currentSender: string = '101'; // The new Dallin Hale Contact we added to Mongo
   constructor(private messageService: MessageService) {}
 
   @ViewChild('subject') subjectRef!: ElementRef;
@@ -18,7 +18,7 @@ export class MessageEditComponent {
   onSendMessage() {
     const subject = this.subjectRef.nativeElement.value;
     const msgText = this.msgTextRef.nativeElement.value;
-    const newMessage = new Message('1', subject, msgText, this.currentSender);
+    const newMessage = new Message('1', subject, msgText, this.currentSender as string);
 
     this.messageService.addMessage(newMessage);
     this.onClear(); // adding this since it makes sense to clear the box after we submit the message.
